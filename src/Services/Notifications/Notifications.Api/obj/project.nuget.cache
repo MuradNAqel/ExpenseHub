@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "FK7jP9982Rc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\Services\\Notifications\\Notifications.Api\\Notifications.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\murad\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.8\\microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
+    "C:\\Users\\murad\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

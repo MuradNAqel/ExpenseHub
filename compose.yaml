@@ -1,0 +1,7 @@
+﻿services:
+  notifications.api:
+    image: notifications.api
+    build:
+      context: .
+      dockerfile: src/Services/Notifications/Notifications.Api/Dockerfile
+
