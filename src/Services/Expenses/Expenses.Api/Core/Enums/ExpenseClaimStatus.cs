@@ -1,9 +1,8 @@
 namespace Expenses.Api.Core.Enums;
 
-public enum Status{
-    Active,
-    Inactive,
-    Expired,
+public enum ExpenseClaimStatus
+{
+    Pending,
+    Approved,
+    Rejected
 }
-
- 

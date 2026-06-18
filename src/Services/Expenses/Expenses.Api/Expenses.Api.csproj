@@ -7,18 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8"/>
+        <PackageReference Include="Dapper" Version="2.1.79" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.8" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.16.4" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Application\Commands\" />
       <Folder Include="Application\Mappers\" />
-      <Folder Include="Application\V1\Controllers\" />
       <Folder Include="Application\V1\Queries\" />
-      <Folder Include="Core\Interfaces\" />
-      <Folder Include="Core\Models\" />
-      <Folder Include="Infrastructure\Data\" />
-      <Folder Include="Infrastructure\Services\" />
     </ItemGroup>
 
 </Project>
