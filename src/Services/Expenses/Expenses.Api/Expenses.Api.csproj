@@ -19,4 +19,8 @@
       <Folder Include="Application\V1\Queries\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
+    </ItemGroup>
+
 </Project>

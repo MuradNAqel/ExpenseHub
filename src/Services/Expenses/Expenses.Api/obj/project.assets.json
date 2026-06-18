@@ -383,6 +383,29 @@
         "build": {
           "buildTransitive/net8.0/_._": {}
         }
+      },
+      "EventBus/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/EventBus.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventBus.dll": {}
+        }
+      },
+      "EventBus.RabbitMQ/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "EventBus": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EventBus.RabbitMQ.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EventBus.RabbitMQ.dll": {}
+        }
       }
     }
   },
@@ -904,11 +927,22 @@
         "system.security.cryptography.protecteddata.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "EventBus/1.0.0": {
+      "type": "project",
+      "path": "../../../BuildingBlocks/EventBus/EventBus/EventBus.csproj",
+      "msbuildProject": "../../../BuildingBlocks/EventBus/EventBus/EventBus.csproj"
+    },
+    "EventBus.RabbitMQ/1.0.0": {
+      "type": "project",
+      "path": "../../../BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj",
+      "msbuildProject": "../../../BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Dapper >= 2.1.79",
+      "EventBus.RabbitMQ >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 10.0.8",
       "Microsoft.Data.SqlClient >= 7.0.1",
       "Scalar.AspNetCore >= 2.16.4"
@@ -945,7 +979,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\EventBus\\EventBus.RabbitMQ\\EventBus.RabbitMQ.csproj": {
+              "projectPath": "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\EventBus\\EventBus.RabbitMQ\\EventBus.RabbitMQ.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

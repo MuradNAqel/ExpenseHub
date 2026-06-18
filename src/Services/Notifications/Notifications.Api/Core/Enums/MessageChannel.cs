@@ -1,6 +1,6 @@
 namespace Notifications.Api.Core.Enums;
 
-public enum Cannel
+public enum MessageChannel
 {
     Telegram, 
     Email, 
