@@ -1,0 +1,133 @@
+.employee-expenses-page {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.expense-page-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.expense-page-toolbar h2,
+.items-header h3 {
+  margin: 0;
+  color: #111827;
+}
+
+.expense-page-toolbar p,
+.items-header p {
+  margin: 0.35rem 0 0;
+  color: #6b7280;
+}
+
+.claims-table-card {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
+}
+
+.claims-table {
+  min-width: 58rem;
+}
+
+.create-claim-dialog {
+  width: min(68rem, calc(100vw - 2rem));
+}
+
+.claim-form {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field span {
+  color: #4b5563;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.field--wide {
+  grid-column: span 3;
+}
+
+.employee-option {
+  display: grid;
+  gap: 0.15rem;
+  min-height: 2.5rem;
+}
+
+.employee-option small {
+  color: #6b7280;
+}
+
+.items-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.expense-items {
+  display: grid;
+  gap: 1rem;
+}
+
+.expense-item-row {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1fr) minmax(10rem, 1fr) minmax(11rem, 1fr) minmax(14rem, 2fr) auto;
+  gap: 0.85rem;
+  align-items: end;
+  padding: 1rem;
+  border: 1px solid #edf0f5;
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.claim-total {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #eef6ff;
+  color: #1f3a8a;
+}
+
+.claim-total strong {
+  font-size: 1.35rem;
+}
+
+@media (max-width: 900px) {
+  .expense-page-toolbar,
+  .items-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .form-grid,
+  .expense-item-row {
+    grid-template-columns: 1fr;
+  }
+
+  .field--wide {
+    grid-column: auto;
+  }
+}

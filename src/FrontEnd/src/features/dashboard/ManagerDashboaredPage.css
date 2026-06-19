@@ -1,0 +1,55 @@
+.dashboard-page {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  min-height: 8rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
+}
+
+.summary-card__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.summary-card__icon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 8px;
+  background: #f3f4f6;
+  font-size: 1.35rem;
+}
+
+.summary-card p {
+  margin: 0 0 0.35rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.summary-card strong {
+  color: #111827;
+  font-size: 1.65rem;
+  line-height: 1.1;
+}
+
+.expenses-table-card {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 6%);
+}
+
+.expenses-table {
+  min-width: 48rem;
+}
