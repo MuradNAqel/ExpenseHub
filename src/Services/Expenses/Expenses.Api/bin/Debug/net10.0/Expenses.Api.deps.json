@@ -9,6 +9,7 @@
       "Expenses.Api/1.0.0": {
         "dependencies": {
           "Dapper": "2.1.79",
+          "EventBus.RabbitMQ": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "10.0.8",
           "Microsoft.Data.SqlClient": "7.0.1",
           "Scalar.AspNetCore": "2.16.4"
@@ -235,6 +236,14 @@
           }
         }
       },
+      "RabbitMQ.Client/7.2.1": {
+        "runtime": {
+          "lib/net8.0/RabbitMQ.Client.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.2.1.0"
+          }
+        }
+      },
       "Scalar.AspNetCore/2.16.4": {
         "runtime": {
           "lib/net10.0/Scalar.AspNetCore.dll": {
@@ -271,6 +280,26 @@
           "lib/net9.0/System.Security.Cryptography.ProtectedData.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.1326.6317"
+          }
+        }
+      },
+      "EventBus/1.0.0": {
+        "runtime": {
+          "EventBus.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "EventBus.RabbitMQ/1.0.0": {
+        "dependencies": {
+          "EventBus": "1.0.0",
+          "RabbitMQ.Client": "7.2.1"
+        },
+        "runtime": {
+          "EventBus.RabbitMQ.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       }
@@ -387,6 +416,13 @@
       "path": "microsoft.sqlserver.server/1.0.0",
       "hashPath": "microsoft.sqlserver.server.1.0.0.nupkg.sha512"
     },
+    "RabbitMQ.Client/7.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-YKXEfg9fVQiTKgZlvIhAfPSFaamEgi8DsQmisCH0IAsU4FYLrtoguDrDj6JtJVGUt40QPnBLRH6fTQcAC4qsOg==",
+      "path": "rabbitmq.client/7.2.1",
+      "hashPath": "rabbitmq.client.7.2.1.nupkg.sha512"
+    },
     "Scalar.AspNetCore/2.16.4": {
       "type": "package",
       "serviceable": true,
@@ -414,6 +450,16 @@
       "sha512": "sha512-t8S9IDpjJKsLpLkeBdW8cWtcPyYqrGu93Dej1RO6WwuL/lkFSqWlan3rMJfortqz1mRIh+sys2AFsSA6jWJ3Jg==",
       "path": "system.security.cryptography.protecteddata/9.0.13",
       "hashPath": "system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
+    },
+    "EventBus/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EventBus.RabbitMQ/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

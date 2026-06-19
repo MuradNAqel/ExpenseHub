@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Dapper;
+using EventBus.Events;
+using EventBus.Interfaces;
 using Expenses.Api.Application.Abstractions;
 using Expenses.Api.Application.Dtos;
 using Expenses.Api.Core.Enums;
@@ -26,7 +28,9 @@ CreateExpenseClaimCommand
 and
 I return a long
  */
-public sealed class CreateExpenseClaimCommandHandler(IDbConnectionFactory connectionFactory)
+public sealed class CreateExpenseClaimCommandHandler(
+    IDbConnectionFactory connectionFactory,
+    IEventBus eventBus)
     : ICommandHandler<CreateExpenseClaimCommand, long>
 {
     private const int MaxTitleLength = 200;
@@ -89,6 +93,15 @@ public sealed class CreateExpenseClaimCommandHandler(IDbConnectionFactory connec
             }
 
             transaction.Commit();
+
+            await eventBus.PublishAsync(new ExpenseClaimCreatedEvent(
+                claimId,
+                request.EmployeeId,
+                title,
+                totalAmount,
+                ExpenseClaimStatus.Pending.ToString(),
+                DateTime.UtcNow));
+
             return claimId;
         }
         catch

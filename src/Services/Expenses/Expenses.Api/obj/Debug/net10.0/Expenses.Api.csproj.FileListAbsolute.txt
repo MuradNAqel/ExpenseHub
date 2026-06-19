@@ -66,3 +66,8 @@ C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\obj\D
 C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\obj\Debug\net10.0\Expenses.Api.genruntimeconfig.cache
 C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\obj\Debug\net10.0\ref\Expenses.Api.dll
 C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\Scalar.AspNetCore.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\RabbitMQ.Client.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\EventBus.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\EventBus.RabbitMQ.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\EventBus.RabbitMQ.pdb
+C:\Users\murad\RiderProjects\ExpenseHub\src\Services\Expenses\Expenses.Api\bin\Debug\net10.0\EventBus.pdb

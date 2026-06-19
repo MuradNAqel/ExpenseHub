@@ -10,3 +10,7 @@ C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.Rab
 C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\obj\Debug\net10.0\refint\EventBus.RabbitMQ.dll
 C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\obj\Debug\net10.0\EventBus.RabbitMQ.pdb
 C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\obj\Debug\net10.0\ref\EventBus.RabbitMQ.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\bin\Debug\net10.0\EventBus.dll
+C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\bin\Debug\net10.0\EventBus.pdb
+C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\obj\Debug\net10.0\EventBus.RabbitMQ.csproj.AssemblyReference.cache
+C:\Users\murad\RiderProjects\ExpenseHub\src\BuildingBlocks\EventBus\EventBus.RabbitMQ\obj\Debug\net10.0\EventBus.D83D059C.Up2Date

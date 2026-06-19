@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using EventBus.RabbitMQ;
 using Expenses.Api.Application.Abstractions;
 using Expenses.Api.Application.Commands;
 using Expenses.Api.Application.Dtos;
@@ -23,6 +24,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+builder.Services.AddRabbitMqEventBus(builder.Configuration);
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IQueryHandler<GetAllExpenseClaimsQuery, IReadOnlyList<ExpenseClaimSummaryResponse>>, GetAllExpenseClaimsQueryHandler>();
@@ -44,4 +46,3 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
-

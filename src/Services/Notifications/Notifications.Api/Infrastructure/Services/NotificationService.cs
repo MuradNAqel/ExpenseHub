@@ -7,7 +7,7 @@ namespace Notifications.Api.Infrastructure.Services;
 
 public class NotificationService(
     IQueryHandler<GetAllNotificationMessagesQuery, IReadOnlyList<NotificationMessageResponse>> getAllNotificationMessagesHandler,
-    IQueryHandler<GetNotificationMessageByIdQuery, NotificationMessageResponse> getNotificationMessageByIdHandler)
+    IQueryHandler<GetNotificationMessageByIdQuery, NotificationMessageResponse?> getNotificationMessageByIdHandler)
     : INotificationService
 {
     public async Task<IReadOnlyList<NotificationMessageResponse>> GetAllAsync()
