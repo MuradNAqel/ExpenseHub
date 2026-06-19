@@ -12,6 +12,7 @@
           "EventBus.RabbitMQ": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "10.0.8",
           "Microsoft.Data.SqlClient": "7.0.1",
+          "NotificationCore.Telegram": "1.0.0",
           "Scalar.AspNetCore": "2.16.4"
         },
         "runtime": {
@@ -302,6 +303,25 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "NotificationCore/1.0.0": {
+        "runtime": {
+          "NotificationCore.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "NotificationCore.Telegram/1.0.0": {
+        "dependencies": {
+          "NotificationCore": "1.0.0"
+        },
+        "runtime": {
+          "NotificationCore.Telegram.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -457,6 +477,16 @@
       "sha512": ""
     },
     "EventBus.RabbitMQ/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotificationCore/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NotificationCore.Telegram/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

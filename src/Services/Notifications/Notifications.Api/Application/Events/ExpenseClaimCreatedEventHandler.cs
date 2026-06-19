@@ -1,5 +1,6 @@
 using EventBus.Events;
 using EventBus.Interfaces;
+using NotificationCore;
 using Notifications.Api.Application.Abstractions;
 using Notifications.Api.Application.Commands;
 using Notifications.Api.Application.Dtos;
@@ -8,7 +9,8 @@ using Notifications.Api.Core.Enums;
 namespace Notifications.Api.Application.Events;
 
 public sealed class ExpenseClaimCreatedEventHandler(
-    ICommandHandler<CreateNotificationCommand, NotificationMessageResponse> createNotificationHandler)
+    ICommandHandler<CreateNotificationCommand, NotificationMessageResponse> createNotificationHandler,
+    ITelegramNotificationSender telegramNotificationSender)
     : IIntegrationEventHandler<ExpenseClaimCreatedEvent>
 {
     public async Task HandleAsync(
@@ -19,13 +21,18 @@ public sealed class ExpenseClaimCreatedEventHandler(
         {
             Type = nameof(ExpenseClaimCreatedEvent),
             MessageChannel = MessageChannel.Telegram,
-            Recipient = "telegram-chat-id-placeholder",
+            Recipient = telegramNotificationSender.DefaultChatId,
             Subject = "Expense claim created",
             Body =
                 $"Expense claim #{integrationEvent.ExpenseClaimId} was created. Total: {integrationEvent.TotalAmount}.",
             Status = Status.Pending
         };
 
-        await createNotificationHandler.HandleAsync(new CreateNotificationCommand(request));
+        var notification = await createNotificationHandler.HandleAsync(new CreateNotificationCommand(request));
+
+        await telegramNotificationSender.SendAsync(
+            notification.Recipient!,
+            notification.Body!,
+            cancellationToken);
     }
 }

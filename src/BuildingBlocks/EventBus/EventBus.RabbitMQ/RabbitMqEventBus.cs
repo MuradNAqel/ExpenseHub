@@ -52,7 +52,8 @@ public sealed class RabbitMqEventBus(IOptions<RabbitMqOptions> options) : IEvent
             HostName = options.HostName,
             Port = options.Port,
             UserName = options.UserName,
-            Password = options.Password
+            Password = options.Password,
+            RequestedConnectionTimeout = TimeSpan.FromSeconds(options.ConnectionTimeoutSeconds)
         };
     }
 }

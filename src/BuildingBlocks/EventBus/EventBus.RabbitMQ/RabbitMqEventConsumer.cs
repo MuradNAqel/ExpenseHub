@@ -25,6 +25,38 @@ public abstract class RabbitMqEventConsumer<TEvent>(
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         var settings = options.Value;
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                await StartConsumingAsync(settings, stoppingToken);
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(
+                    ex,
+                    "RabbitMQ consumer for {EventName} could not connect. Retrying in {RetryDelaySeconds} seconds.",
+                    typeof(TEvent).Name,
+                    settings.RetryDelaySeconds);
+
+                DisposeConnection();
+
+                await Task.Delay(
+                    TimeSpan.FromSeconds(settings.RetryDelaySeconds),
+                    stoppingToken);
+            }
+        }
+    }
+
+    private async Task StartConsumingAsync(
+        RabbitMqOptions settings,
+        CancellationToken stoppingToken)
+    {
         var factory = RabbitMqEventBus.CreateConnectionFactory(settings);
 
         _connection = await factory.CreateConnectionAsync(stoppingToken);
@@ -65,6 +97,11 @@ public abstract class RabbitMqEventConsumer<TEvent>(
             consumer: consumer,
             cancellationToken: stoppingToken);
 
+        logger.LogInformation(
+            "RabbitMQ consumer for {EventName} is listening on queue {QueueName}.",
+            typeof(TEvent).Name,
+            queueName);
+
         await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
@@ -100,8 +137,15 @@ public abstract class RabbitMqEventConsumer<TEvent>(
 
     public override void Dispose()
     {
+        DisposeConnection();
+        base.Dispose();
+    }
+
+    private void DisposeConnection()
+    {
         _channel?.Dispose();
         _connection?.Dispose();
-        base.Dispose();
+        _channel = null;
+        _connection = null;
     }
 }

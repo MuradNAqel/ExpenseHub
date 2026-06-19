@@ -1,7 +1,52 @@
-﻿services:
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "ExpenseHub!2026"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+  expenses.api:
+    image: expenses.api
+    build:
+      context: .
+      dockerfile: src/Services/Expenses/Expenses.Api/Dockerfile
+    ports:
+      - "8082:8080"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitMQ__HostName: rabbitmq
+      ConnectionStrings__SqlServerConnection: "Server=sqlserver,1433;Database=ExpenseHubDb;User Id=sa;Password=ExpenseHub!2026;TrustServerCertificate=True;Encrypt=False;"
+
   notifications.api:
     image: notifications.api
     build:
       context: .
       dockerfile: src/Services/Notifications/Notifications.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      RabbitMQ__HostName: rabbitmq
+      ConnectionStrings__SqlServerConnection: "Server=sqlserver,1433;Database=ExpenseHubDb;User Id=sa;Password=ExpenseHub!2026;TrustServerCertificate=True;Encrypt=False;"
 
+volumes:
+  sqlserver-data:

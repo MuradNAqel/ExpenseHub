@@ -420,6 +420,29 @@
         "runtime": {
           "bin/placeholder/EventBus.RabbitMQ.dll": {}
         }
+      },
+      "NotificationCore/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/NotificationCore.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NotificationCore.dll": {}
+        }
+      },
+      "NotificationCore.Telegram/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "NotificationCore": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/NotificationCore.Telegram.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NotificationCore.Telegram.dll": {}
+        }
       }
     }
   },
@@ -968,6 +991,16 @@
       "type": "project",
       "path": "../../../BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj",
       "msbuildProject": "../../../BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj"
+    },
+    "NotificationCore/1.0.0": {
+      "type": "project",
+      "path": "../../../BuildingBlocks/NotificationCore/NotificationCore/NotificationCore.csproj",
+      "msbuildProject": "../../../BuildingBlocks/NotificationCore/NotificationCore/NotificationCore.csproj"
+    },
+    "NotificationCore.Telegram/1.0.0": {
+      "type": "project",
+      "path": "../../../BuildingBlocks/NotificationCore/NotificationCore.Telegram/NotificationCore.Telegram.csproj",
+      "msbuildProject": "../../../BuildingBlocks/NotificationCore/NotificationCore.Telegram/NotificationCore.Telegram.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -976,6 +1009,7 @@
       "EventBus.RabbitMQ >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 10.0.8",
       "Microsoft.Data.SqlClient >= 7.0.1",
+      "NotificationCore.Telegram >= 1.0.0",
       "Scalar.AspNetCore >= 2.16.4"
     ]
   },
@@ -1013,6 +1047,9 @@
           "projectReferences": {
             "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\EventBus\\EventBus.RabbitMQ\\EventBus.RabbitMQ.csproj": {
               "projectPath": "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\EventBus\\EventBus.RabbitMQ\\EventBus.RabbitMQ.csproj"
+            },
+            "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\NotificationCore\\NotificationCore.Telegram\\NotificationCore.Telegram.csproj": {
+              "projectPath": "C:\\Users\\murad\\RiderProjects\\ExpenseHub\\src\\BuildingBlocks\\NotificationCore\\NotificationCore.Telegram\\NotificationCore.Telegram.csproj"
             }
           }
         }

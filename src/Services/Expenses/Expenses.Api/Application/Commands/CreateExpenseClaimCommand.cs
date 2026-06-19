@@ -41,6 +41,10 @@ public sealed class CreateExpenseClaimCommandHandler(
         var request = command.Request;
         Validate(request);
 
+        var totalAmount = request.Items.Sum(x => x.Amount);
+        var title = request.Title.Trim();
+        long claimId;
+
         using var connection = connectionFactory.CreateConnection();
         connection.Open();
 
@@ -48,9 +52,6 @@ public sealed class CreateExpenseClaimCommandHandler(
 
         try
         {
-            var totalAmount = request.Items.Sum(x => x.Amount);
-            var title = request.Title.Trim();
-
             const string claimSql = """
                 INSERT INTO ExpenseClaims
                     (EmployeeId, Title, TotalAmount, Status, CreatedAt)
@@ -59,7 +60,7 @@ public sealed class CreateExpenseClaimCommandHandler(
                     (@EmployeeId, @Title, @TotalAmount, @Status, SYSUTCDATETIME());
                 """;
 
-            var claimId = await connection.ExecuteScalarAsync<long>(
+            claimId = await connection.ExecuteScalarAsync<long>(
                 claimSql,
                 new
                 {
@@ -93,22 +94,22 @@ public sealed class CreateExpenseClaimCommandHandler(
             }
 
             transaction.Commit();
-
-            await eventBus.PublishAsync(new ExpenseClaimCreatedEvent(
-                claimId,
-                request.EmployeeId,
-                title,
-                totalAmount,
-                ExpenseClaimStatus.Pending.ToString(),
-                DateTime.UtcNow));
-
-            return claimId;
         }
         catch
         {
             transaction.Rollback();
             throw;
         }
+
+        await eventBus.PublishAsync(new ExpenseClaimCreatedEvent(
+            claimId,
+            request.EmployeeId,
+            title,
+            totalAmount,
+            ExpenseClaimStatus.Pending.ToString(),
+            DateTime.UtcNow));
+
+        return claimId;
     }
 
     private static void Validate(CreateExpenseClaimRequest request)

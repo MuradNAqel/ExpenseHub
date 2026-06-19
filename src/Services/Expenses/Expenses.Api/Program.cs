@@ -34,6 +34,8 @@ builder.Services.AddScoped<ICommandHandler<ApproveExpenseClaimCommand, bool>, Ap
 builder.Services.AddScoped<ICommandHandler<RejectExpenseClaimCommand, bool>, RejectExpenseClaimCommandHandler>();
 var app = builder.Build();
 
+await app.Services.InitializeExpenseDatabaseAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

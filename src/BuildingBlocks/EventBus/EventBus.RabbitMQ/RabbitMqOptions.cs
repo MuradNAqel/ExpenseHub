@@ -7,4 +7,6 @@ public sealed class RabbitMqOptions
     public string UserName { get; set; } = "guest";
     public string Password { get; set; } = "guest";
     public string ExchangeName { get; set; } = "expensehub.events";
+    public int RetryDelaySeconds { get; set; } = 5;
+    public int ConnectionTimeoutSeconds { get; set; } = 5;
 }

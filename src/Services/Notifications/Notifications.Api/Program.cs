@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using EventBus.Events;
 using EventBus.Interfaces;
 using EventBus.RabbitMQ;
+using NotificationCore.Telegram;
 using Notifications.Api.Application.Abstractions;
 using Notifications.Api.Application.Commands;
 using Notifications.Api.Application.Dtos;
@@ -25,6 +26,7 @@ builder.Services
     });
 builder.Services.AddOpenApi();
 builder.Services.AddRabbitMqEventBus(builder.Configuration);
+builder.Services.AddTelegramNotifications(builder.Configuration);
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services
@@ -41,6 +43,8 @@ builder.Services
 builder.Services.AddHostedService<ExpenseClaimCreatedConsumer>();
 var app = builder.Build();
 
+await app.Services.InitializeNotificationsDatabaseAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -49,7 +53,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapControllers();
 

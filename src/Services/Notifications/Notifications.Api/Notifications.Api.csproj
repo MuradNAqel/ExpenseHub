@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\NotificationCore\NotificationCore.Telegram\NotificationCore.Telegram.csproj" />
     </ItemGroup>
 
 </Project>
