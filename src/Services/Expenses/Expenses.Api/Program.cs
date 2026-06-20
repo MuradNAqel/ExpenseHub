@@ -29,6 +29,7 @@ builder.Services.AddRabbitMqEventBus(builder.Configuration);
 builder.Services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IQueryHandler<GetAllExpenseClaimsQuery, PagedResponse<ExpenseClaimSummaryResponse>>, GetAllExpenseClaimsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetExpenseDashboardQuery, ExpenseDashboardResponse>, GetExpenseDashboardQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetExpenseClaimByIdQuery, ExpenseClaimDetailsResponse?>, GetExpenseClaimByIdQueryHandler>();
 builder.Services.AddScoped<ICommandHandler<CreateExpenseClaimCommand, long>, CreateExpenseClaimCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<ApproveExpenseClaimCommand, bool>, ApproveExpenseClaimCommandHandler>();

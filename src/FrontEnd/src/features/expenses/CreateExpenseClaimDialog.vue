@@ -8,13 +8,19 @@ import InputNumber from 'primevue/inputnumber'
 import InputText from 'primevue/inputtext'
 import Textarea from 'primevue/textarea'
 import { employees, type Employee } from './expenseEmployees'
-import { formatCurrency, formatDateOnly, formatDisplayDate } from './expenseFormatters'
+import {
+  currencyCode,
+  currencyLocale,
+  formatCurrency,
+  formatDateOnly,
+  formatDisplayDate,
+} from './expenseFormatters'
 import {
   createExpenseClaim,
   getExpenseApiErrorMessage,
   type CreateExpenseClaimRequest,
   type ExpenseCategory,
-} from './expensesApi'
+} from '@/core/api/expensesApi'
 import type { ExpenseClaimRow } from './expenseViewModels'
 
 type ExpenseItemForm = {
@@ -188,8 +194,8 @@ async function submitClaim() {
             <InputNumber
               v-model="item.amount"
               mode="currency"
-              currency="USD"
-              locale="en-US"
+              :currency="currencyCode"
+              :locale="currencyLocale"
               :min="0"
             />
           </label>

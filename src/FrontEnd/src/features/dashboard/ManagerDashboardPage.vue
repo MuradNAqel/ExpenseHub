@@ -1,131 +1,184 @@
 <script setup lang="ts">
-import Card from 'primevue/card'
-import Column from 'primevue/column'
-import DataTable from 'primevue/datatable'
-import Tag from 'primevue/tag'
+import { computed, onMounted, ref } from 'vue'
 
-type ExpenseStatus = 'Pending' | 'Approved' | 'Rejected'
+import { getEmployeeName } from '@/features/expenses/expenseEmployees'
+import { formatCurrency } from '@/features/expenses/expenseFormatters'
+import {
+  getExpenseApiErrorMessage,
+  getExpenseDashboard,
+  type ExpenseClaimStatus,
+  type ExpenseDashboardResponse,
+} from '@/core/api/expensesApi'
 
-type ExpenseSummary = {
-  label: string
-  value: string
-  icon: string
-  accent: string
-}
+import DashboardBreakdownList from './DashboardBreakdownList.vue'
+import DashboardMonthlyChart from './DashboardMonthlyChart.vue'
+import DashboardRecentClaimsTable from './DashboardRecentClaimsTable.vue'
+import DashboardStatusChart from './DashboardStatusChart.vue'
+import DashboardSummaryCards from './DashboardSummaryCards.vue'
+import type {
+  DashboardBreakdownItem,
+  DashboardMetric,
+  DashboardStatusSegment,
+} from './dashboardTypes'
 
-type RecentExpense = {
-  id: string
-  employee: string
-  category: string
-  submittedAt: string
-  amount: string
-  status: ExpenseStatus
-}
+const dashboard = ref<ExpenseDashboardResponse | null>(null)
+const isLoading = ref(false)
+const errorMessage = ref('')
 
-const summaries: ExpenseSummary[] = [
-  { label: 'Total Expenses', value: '248', icon: 'pi pi-receipt', accent: '#2563eb' },
-  { label: 'Pending Expenses', value: '32', icon: 'pi pi-clock', accent: '#d97706' },
-  { label: 'Approved Expenses', value: '184', icon: 'pi pi-check-circle', accent: '#16a34a' },
-  { label: 'Rejected Expenses', value: '12', icon: 'pi pi-times-circle', accent: '#dc2626' },
-  { label: 'Total Requested Amount', value: '$128,450', icon: 'pi pi-wallet', accent: '#7c3aed' },
-]
+onMounted(loadDashboard)
 
-const recentExpenses: RecentExpense[] = [
-  {
-    id: 'EXP-1048',
-    employee: 'Lina Haddad',
-    category: 'Travel',
-    submittedAt: 'Jun 18, 2026',
-    amount: '$1,240.00',
-    status: 'Pending',
-  },
-  {
-    id: 'EXP-1047',
-    employee: 'Omar Nasser',
-    category: 'Software',
-    submittedAt: 'Jun 18, 2026',
-    amount: '$320.00',
-    status: 'Approved',
-  },
-  {
-    id: 'EXP-1046',
-    employee: 'Sara Mansour',
-    category: 'Meals',
-    submittedAt: 'Jun 17, 2026',
-    amount: '$86.50',
-    status: 'Rejected',
-  },
-  {
-    id: 'EXP-1045',
-    employee: 'Adam Saleh',
-    category: 'Office Supplies',
-    submittedAt: 'Jun 16, 2026',
-    amount: '$214.30',
-    status: 'Approved',
-  },
-  {
-    id: 'EXP-1044',
-    employee: 'Nour Khalil',
-    category: 'Transport',
-    submittedAt: 'Jun 15, 2026',
-    amount: '$52.75',
-    status: 'Pending',
-  },
-]
+const metrics = computed<DashboardMetric[]>(() => {
+  const data = dashboard.value
 
-function getStatusSeverity(status: ExpenseStatus) {
-  switch (status) {
-    case 'Approved':
-      return 'success'
-    case 'Rejected':
-      return 'danger'
-    default:
-      return 'warn'
+  return [
+    {
+      label: 'Total Claims',
+      value: data ? String(data.totalClaims) : '0',
+      note: data ? `${data.pendingClaims} pending review` : 'Awaiting data',
+      icon: 'pi pi-receipt',
+      accent: '#2563eb',
+    },
+    {
+      label: 'Requested Amount',
+      value: formatCurrency(data?.totalRequestedAmount ?? 0),
+      note: 'All submitted claims',
+      icon: 'pi pi-wallet',
+      accent: '#7c3aed',
+    },
+    {
+      label: 'Pending Amount',
+      value: formatCurrency(data?.pendingAmount ?? 0),
+      note: 'Needs manager decision',
+      icon: 'pi pi-clock',
+      accent: '#d97706',
+    },
+    {
+      label: 'Approved Amount',
+      value: formatCurrency(data?.approvedAmount ?? 0),
+      note: 'Ready for reimbursement',
+      icon: 'pi pi-check-circle',
+      accent: '#16a34a',
+    },
+    {
+      label: 'Average Claim',
+      value: formatCurrency(data?.averageClaimAmount ?? 0),
+      note: 'Mean requested value',
+      icon: 'pi pi-chart-line',
+      accent: '#0f766e',
+    },
+  ]
+})
+
+const statusSegments = computed<DashboardStatusSegment[]>(() => {
+  const data = dashboard.value
+  const total = data?.totalClaims ?? 0
+  const statusColors: Record<ExpenseClaimStatus, string> = {
+    Pending:  '#0369a1',
+    Approved: '#16a34a',
+    Rejected: '#dc2626',
+  }
+
+  return (data?.statusTotals ?? []).map((item) => ({
+    ...item,
+    color: statusColors[item.status],
+    percentage: total === 0 ? 0 : Math.round((item.claimCount / total) * 100),
+  }))
+})
+
+const statusDonutStyle = computed(() => {
+  if (!dashboard.value || dashboard.value.totalClaims === 0 || statusSegments.value.length === 0) {
+    return { background: '#eef2f7' }
+  }
+
+  let cursor = 0
+  const parts = statusSegments.value.map((segment) => {
+    const start = cursor
+    cursor += segment.percentage
+    return `${segment.color} ${start}% ${cursor}%`
+  })
+
+  return { background: `conic-gradient(${parts.join(', ')})` }
+})
+
+const maxMonthlyAmount = computed(() =>
+  Math.max(...(dashboard.value?.monthlyTotals.map((item) => item.totalAmount) ?? [0]), 1),
+)
+
+const categoryBreakdown = computed<DashboardBreakdownItem[]>(() => {
+  const categoryTotals = dashboard.value?.categoryTotals ?? []
+  const maxAmount = Math.max(...categoryTotals.map((item) => item.totalAmount), 1)
+
+  return categoryTotals.map((category) => ({
+    id: category.category,
+    label: category.category,
+    amount: category.totalAmount,
+    detail: `${category.itemCount} items`,
+    percentage: Math.max((category.totalAmount / maxAmount) * 100, 4),
+  }))
+})
+
+const employeeBreakdown = computed<DashboardBreakdownItem[]>(() => {
+  const topEmployees = dashboard.value?.topEmployees ?? []
+  const maxAmount = Math.max(...topEmployees.map((item) => item.totalAmount), 1)
+
+  return topEmployees.map((employee) => ({
+    id: employee.employeeId,
+    label: getEmployeeName(employee.employeeId),
+    amount: employee.totalAmount,
+    detail: `${employee.claimCount} claims`,
+    percentage: Math.max((employee.totalAmount / maxAmount) * 100, 4),
+  }))
+})
+
+async function loadDashboard() {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    dashboard.value = await getExpenseDashboard()
+  } catch (error) {
+    errorMessage.value = getExpenseApiErrorMessage(error)
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
 
 <template>
   <section class="dashboard-page">
-    <div class="summary-grid">
-      <Card v-for="summary in summaries" :key="summary.label" class="summary-card">
-        <template #content>
-          <div class="summary-card__content">
-            <span class="summary-card__icon" :style="{ color: summary.accent }">
-              <i :class="summary.icon" />
-            </span>
-            <div>
-              <p>{{ summary.label }}</p>
-              <strong>{{ summary.value }}</strong>
-            </div>
-          </div>
-        </template>
-      </Card>
+    <p v-if="errorMessage" class="dashboard-error">{{ errorMessage }}</p>
+
+    <DashboardSummaryCards :metrics="metrics" :is-loading="isLoading" />
+
+    <div class="dashboard-grid">
+      <DashboardStatusChart
+        :total-claims="dashboard?.totalClaims ?? 0"
+        :segments="statusSegments"
+        :donut-style="statusDonutStyle"
+      />
+      <DashboardMonthlyChart
+        :monthly-totals="dashboard?.monthlyTotals ?? []"
+        :max-amount="maxMonthlyAmount"
+      />
     </div>
 
-    <Card class="expenses-table-card">
-      <template #title>Recent Expenses</template>
-      <template #content>
-        <DataTable
-          :value="recentExpenses"
-          data-key="id"
-          striped-rows
-          responsive-layout="scroll"
-          class="expenses-table"
-        >
-          <Column field="id" header="Expense ID" />
-          <Column field="employee" header="Employee" />
-          <Column field="category" header="Category" />
-          <Column field="submittedAt" header="Submitted" />
-          <Column field="amount" header="Amount" />
-          <Column header="Status">
-            <template #body="{ data }">
-              <Tag :value="data.status" :severity="getStatusSeverity(data.status)" />
-            </template>
-          </Column>
-        </DataTable>
-      </template>
-    </Card>
+    <div class="dashboard-grid dashboard-grid--secondary">
+      <DashboardBreakdownList
+        title="Spend By Category"
+        :items="categoryBreakdown"
+        empty-title="No category data"
+        empty-description="Expense items will appear here once claims are submitted."
+      />
+      <DashboardBreakdownList
+        title="Top Employees"
+        :items="employeeBreakdown"
+        variant="employee"
+        empty-title="No employee spend"
+        empty-description="Employee totals will appear after claim activity."
+      />
+    </div>
+
+    <DashboardRecentClaimsTable :claims="dashboard?.recentClaims ?? []" />
   </section>
 </template>
 

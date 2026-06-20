@@ -5,18 +5,33 @@ import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import Dialog from 'primevue/dialog'
 import Tag from 'primevue/tag'
-import { getEmployeeCode, getEmployeeName } from './expenseEmployees'
-import { formatCurrency, formatDisplayDate, getStatusSeverity } from './expenseFormatters'
+import { getEmployeeCode, getEmployeeName } from '@/features/expenses/expenseEmployees'
+import {
+  formatCurrency,
+  formatDisplayDate,
+  getStatusSeverity,
+} from '@/features/expenses/expenseFormatters'
 import {
   getExpenseApiErrorMessage,
   getExpenseClaimById,
+  type ExpenseClaimStatus,
   type ExpenseClaimDetailsResponse,
-} from './expensesApi'
-import type { ExpenseClaimRow } from './expenseViewModels'
+} from '@/core/api/expensesApi'
+
+type ExpenseClaimDetailsDialogClaim = {
+  id: string
+  apiId: number
+  employeeId: string
+  employeeName: string
+  title: string
+  totalAmount: number
+  status: ExpenseClaimStatus
+  rejectionReason?: string | null
+}
 
 const props = defineProps<{
   visible: boolean
-  claim: ExpenseClaimRow | null
+  claim: ExpenseClaimDetailsDialogClaim | null
 }>()
 
 const emit = defineEmits<{
@@ -30,6 +45,16 @@ const errorMessage = ref('')
 const dialogVisible = computed({
   get: () => props.visible,
   set: (value) => emit('update:visible', value),
+})
+
+const rejectionReason = computed(() => {
+  const status = claimDetails.value?.status ?? props.claim?.status
+
+  if (status !== 'Rejected') {
+    return ''
+  }
+
+  return claimDetails.value?.rejectionReason ?? props.claim?.rejectionReason ?? ''
 })
 
 watch(
@@ -96,6 +121,11 @@ watch(
         <strong>{{ claimDetails?.title ?? claim.title }}</strong>
       </div>
 
+      <div v-if="rejectionReason" class="claim-rejection-block">
+        <span>Rejection Reason</span>
+        <strong>{{ rejectionReason }}</strong>
+      </div>
+
       <p v-if="isLoading" class="details-message">Loading claim details...</p>
       <p v-else-if="errorMessage" class="submit-error">{{ errorMessage }}</p>
       <p v-else-if="claimDetails && claimDetails.items.length === 0" class="details-message">
@@ -133,3 +163,68 @@ watch(
     </template>
   </Dialog>
 </template>
+
+<style>
+.claim-details-dialog {
+  width: min(58rem, calc(100vw - 2rem));
+}
+
+.claim-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.claim-details-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.claim-details-summary > div,
+.claim-title-block,
+.claim-rejection-block {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.claim-rejection-block {
+  border-color: #fecaca;
+  background: #fff7f7;
+}
+
+.claim-details-summary span,
+.claim-title-block span,
+.claim-rejection-block span {
+  color: #6b7280;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.claim-rejection-block strong {
+  color: #991b1b;
+}
+
+.claim-details-summary small {
+  color: #6b7280;
+}
+
+.details-message {
+  margin: 0;
+  color: #4b5563;
+  font-weight: 700;
+}
+
+.claim-items-table {
+  min-width: 44rem;
+}
+
+@media (max-width: 900px) {
+  .claim-details-summary {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

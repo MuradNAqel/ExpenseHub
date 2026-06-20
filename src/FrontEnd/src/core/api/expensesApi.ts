@@ -45,6 +45,11 @@ export type PagedResponse<T> = {
 export type ExpenseClaimsQuery = {
   page: number
   pageSize: number
+  search?: string
+  status?: ExpenseClaimStatus
+  employeeId?: number
+  createdFrom?: string
+  createdTo?: string
 }
 
 export type ExpenseItemResponse = {
@@ -66,6 +71,46 @@ export type ExpenseClaimDetailsResponse = {
   reviewedAt: string | null
   rejectionReason: string | null
   items: ExpenseItemResponse[]
+}
+
+export type ExpenseDashboardResponse = {
+  totalClaims: number
+  pendingClaims: number
+  approvedClaims: number
+  rejectedClaims: number
+  totalRequestedAmount: number
+  pendingAmount: number
+  approvedAmount: number
+  averageClaimAmount: number
+  statusTotals: ExpenseStatusTotalResponse[]
+  monthlyTotals: ExpenseMonthlyTotalResponse[]
+  categoryTotals: ExpenseCategoryTotalResponse[]
+  topEmployees: ExpenseEmployeeTotalResponse[]
+  recentClaims: ExpenseClaimSummaryResponse[]
+}
+
+export type ExpenseStatusTotalResponse = {
+  status: ExpenseClaimStatus
+  claimCount: number
+  totalAmount: number
+}
+
+export type ExpenseMonthlyTotalResponse = {
+  month: string
+  claimCount: number
+  totalAmount: number
+}
+
+export type ExpenseCategoryTotalResponse = {
+  category: ExpenseCategory
+  itemCount: number
+  totalAmount: number
+}
+
+export type ExpenseEmployeeTotalResponse = {
+  employeeId: number
+  claimCount: number
+  totalAmount: number
 }
 
 type ApiErrorResponse = {
@@ -95,6 +140,20 @@ export async function getExpenseClaimById(id: number) {
   const { data } = await httpClient.get<ExpenseClaimDetailsResponse>(`/api/expenses/${id}`)
 
   return data
+}
+
+export async function getExpenseDashboard() {
+  const { data } = await httpClient.get<ExpenseDashboardResponse>('/api/expenses/dashboard')
+
+  return data
+}
+
+export async function approveExpenseClaim(id: number) {
+  await httpClient.post(`/api/expenses/${id}/approve`)
+}
+
+export async function rejectExpenseClaim(id: number, reason: string) {
+  await httpClient.post(`/api/expenses/${id}/reject`, { reason })
 }
 
 export function getExpenseApiErrorMessage(error: unknown) {

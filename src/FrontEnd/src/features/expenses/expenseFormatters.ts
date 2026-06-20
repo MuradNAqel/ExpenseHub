@@ -1,9 +1,12 @@
-import type { ExpenseClaimStatus } from './expensesApi'
+import type { ExpenseClaimStatus } from '@/core/api/expensesApi'
+
+export const currencyCode = 'JOD'
+export const currencyLocale = 'en-JO'
 
 export function formatCurrency(value: number) {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat(currencyLocale, {
     style: 'currency',
-    currency: 'JD',
+    currency: currencyCode,
   }).format(value)
 }
 

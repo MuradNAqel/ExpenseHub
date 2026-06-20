@@ -1,6 +1,6 @@
 import { getEmployeeCode, getEmployeeName } from './expenseEmployees'
 import { formatDisplayDate } from './expenseFormatters'
-import type { ExpenseClaimStatus, ExpenseClaimSummaryResponse } from './expensesApi'
+import type { ExpenseClaimStatus, ExpenseClaimSummaryResponse } from '@/core/api/expensesApi'
 
 export type ExpenseClaimRow = {
   id: string

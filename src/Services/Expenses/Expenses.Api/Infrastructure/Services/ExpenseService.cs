@@ -7,6 +7,7 @@ namespace Expenses.Api.Infrastructure.Services;
 
 public class ExpenseService(
     IQueryHandler<GetAllExpenseClaimsQuery, PagedResponse<ExpenseClaimSummaryResponse>> getAllExpenseClaimsHandler,
+    IQueryHandler<GetExpenseDashboardQuery, ExpenseDashboardResponse> getExpenseDashboardHandler,
     IQueryHandler<GetExpenseClaimByIdQuery, ExpenseClaimDetailsResponse?> getExpenseClaimByIdHandler,
     ICommandHandler<CreateExpenseClaimCommand, long> createExpenseClaimHandler,
     ICommandHandler<ApproveExpenseClaimCommand, bool> approveExpenseClaimHandler,
@@ -15,6 +16,11 @@ public class ExpenseService(
     public async Task<PagedResponse<ExpenseClaimSummaryResponse>> GetAllAsync(GetAllExpenseClaimsQuery query)
     {
         return await getAllExpenseClaimsHandler.HandleAsync(query);
+    }
+
+    public async Task<ExpenseDashboardResponse> GetDashboardAsync()
+    {
+        return await getExpenseDashboardHandler.HandleAsync(new GetExpenseDashboardQuery());
     }
 
     public async Task<ExpenseClaimDetailsResponse?> GetByIdAsync(long id)

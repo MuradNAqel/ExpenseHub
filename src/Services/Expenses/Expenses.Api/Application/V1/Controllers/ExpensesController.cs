@@ -17,6 +17,14 @@ public class ExpensesController(IExpenseService expenseService) : ControllerBase
         return Ok(expenses);
     }
 
+    [HttpGet("dashboard")]
+    [ProducesResponseType(typeof(ExpenseDashboardResponse), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ExpenseDashboardResponse>> GetDashboardAsync()
+    {
+        var dashboard = await expenseService.GetDashboardAsync();
+        return Ok(dashboard);
+    }
+
     [HttpGet("{id:long}", Name = "GetById")]
     [ProducesResponseType(typeof(ExpenseClaimDetailsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

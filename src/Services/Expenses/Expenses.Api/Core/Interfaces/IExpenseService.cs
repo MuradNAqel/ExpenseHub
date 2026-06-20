@@ -6,6 +6,7 @@ namespace Expenses.Api.Core.Interfaces;
 public interface IExpenseService
 {
     Task<PagedResponse<ExpenseClaimSummaryResponse>> GetAllAsync(GetAllExpenseClaimsQuery query);
+    Task<ExpenseDashboardResponse> GetDashboardAsync();
     Task<ExpenseClaimDetailsResponse?> GetByIdAsync(long id);
     Task<long> CreateAsync(CreateExpenseClaimRequest request);
     Task<bool> ApproveAsync(long id);

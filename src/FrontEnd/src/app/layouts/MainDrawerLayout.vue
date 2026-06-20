@@ -152,7 +152,7 @@ function navigateTo(item: MainNavigationItem) {
         </div>
       </header>
 
-      <RouterView />
+      <RouterView :key="route.fullPath" />
     </main>
   </div>
 </template>

@@ -48,5 +48,15 @@ services:
       RabbitMQ__HostName: rabbitmq
       ConnectionStrings__SqlServerConnection: "Server=sqlserver,1433;Database=ExpenseHubDb;User Id=sa;Password=ExpenseHub!2026;TrustServerCertificate=True;Encrypt=False;"
 
+  frontend:
+    image: expensehub.frontend
+    build:
+      context: .
+      dockerfile: src/FrontEnd/Dockerfile
+    ports:
+      - "8088:80"
+    depends_on:
+      - expenses.api
+
 volumes:
   sqlserver-data:
