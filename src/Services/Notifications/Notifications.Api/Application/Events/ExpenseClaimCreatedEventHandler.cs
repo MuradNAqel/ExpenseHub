@@ -4,7 +4,6 @@ using NotificationCore;
 using Notifications.Api.Application.Abstractions;
 using Notifications.Api.Application.Commands;
 using Notifications.Api.Application.Dtos;
-using Notifications.Api.Core.Enums;
 
 namespace Notifications.Api.Application.Events;
 

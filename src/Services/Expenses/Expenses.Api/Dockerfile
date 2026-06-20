@@ -8,6 +8,9 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Expenses/Expenses.Api/Expenses.Api.csproj", "src/Services/Expenses/Expenses.Api/"]
+COPY ["src/BuildingBlocks/WebApi/WebApi/WebApi.csproj", "src/BuildingBlocks/WebApi/WebApi/"]
+COPY ["src/BuildingBlocks/EventBus/EventBus/EventBus.csproj", "src/BuildingBlocks/EventBus/EventBus/"]
+COPY ["src/BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "src/BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
 RUN dotnet restore "src/Services/Expenses/Expenses.Api/Expenses.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Expenses/Expenses.Api"

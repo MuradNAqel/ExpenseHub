@@ -1,5 +1,4 @@
 using System.Data;
-using Expenses.Api.Core.Interfaces;
 using Microsoft.Data.SqlClient;
 
 namespace Expenses.Api.Infrastructure.Data;

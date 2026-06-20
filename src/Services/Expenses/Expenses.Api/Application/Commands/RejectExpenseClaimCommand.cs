@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using Dapper;
 using Expenses.Api.Application.Abstractions;
 using Expenses.Api.Application.Dtos;
-using Expenses.Api.Core.Enums;
-using Expenses.Api.Core.Interfaces;
 
 namespace Expenses.Api.Application.Commands;
 

@@ -8,11 +8,11 @@ using Notifications.Api.Application.Commands;
 using Notifications.Api.Application.Dtos;
 using Notifications.Api.Application.Events;
 using Notifications.Api.Application.V1.Queries;
-using Notifications.Api.Core.Interfaces;
 using Notifications.Api.Infrastructure.Data;
 using Notifications.Api.Infrastructure.Messaging;
 using Notifications.Api.Infrastructure.Services;
 using Scalar.AspNetCore;
+using WebApi.Errors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +24,7 @@ builder.Services
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+builder.Services.AddGlobalExceptionHandling();
 builder.Services.AddOpenApi();
 builder.Services.AddRabbitMqEventBus(builder.Configuration);
 builder.Services.AddTelegramNotifications(builder.Configuration);
@@ -55,6 +56,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
+app.UseGlobalExceptionHandling();
 app.MapControllers();
 
 app.Run();

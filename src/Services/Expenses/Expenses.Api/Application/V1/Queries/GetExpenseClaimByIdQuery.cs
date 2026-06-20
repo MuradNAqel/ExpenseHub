@@ -2,7 +2,6 @@ using Dapper;
 using Expenses.Api.Application.Abstractions;
 using Expenses.Api.Application.Dtos;
 using Expenses.Api.Application.Mappers;
-using Expenses.Api.Core.Interfaces;
 
 namespace Expenses.Api.Application.V1.Queries;
 

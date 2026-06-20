@@ -4,8 +4,6 @@ using EventBus.Events;
 using EventBus.Interfaces;
 using Expenses.Api.Application.Abstractions;
 using Expenses.Api.Application.Dtos;
-using Expenses.Api.Core.Enums;
-using Expenses.Api.Core.Interfaces;
 
 namespace Expenses.Api.Application.Commands;
 
@@ -50,56 +48,48 @@ public sealed class CreateExpenseClaimCommandHandler(
 
         using var transaction = connection.BeginTransaction();
 
-        try
-        {
-            const string claimSql = """
-                INSERT INTO ExpenseClaims
-                    (EmployeeId, Title, TotalAmount, Status, CreatedAt)
-                OUTPUT INSERTED.Id
-                VALUES
-                    (@EmployeeId, @Title, @TotalAmount, @Status, SYSUTCDATETIME());
-                """;
+        const string claimSql = """
+            INSERT INTO ExpenseClaims
+                (EmployeeId, Title, TotalAmount, Status, CreatedAt)
+            OUTPUT INSERTED.Id
+            VALUES
+                (@EmployeeId, @Title, @TotalAmount, @Status, SYSUTCDATETIME());
+            """;
 
-            claimId = await connection.ExecuteScalarAsync<long>(
-                claimSql,
+        claimId = await connection.ExecuteScalarAsync<long>(
+            claimSql,
+            new
+            {
+                request.EmployeeId,
+                Title = title,
+                TotalAmount = totalAmount,
+                Status = ExpenseClaimStatus.Pending.ToString()
+            },
+            transaction);
+
+        const string itemSql = """
+            INSERT INTO ExpenseItems
+                (ExpenseClaimId, Category, Amount, Description, ExpenseDate)
+            VALUES
+                (@ExpenseClaimId, @Category, @Amount, @Description, @ExpenseDate);
+            """;
+
+        foreach (var item in request.Items)
+        {
+            await connection.ExecuteAsync(
+                itemSql,
                 new
                 {
-                    request.EmployeeId,
-                    Title = title,
-                    TotalAmount = totalAmount,
-                    Status = ExpenseClaimStatus.Pending.ToString()
+                    ExpenseClaimId = claimId,
+                    Category = item.Category.ToString(),
+                    item.Amount,
+                    Description = string.IsNullOrWhiteSpace(item.Description) ? null : item.Description.Trim(),
+                    ExpenseDate = item.ExpenseDate.ToDateTime(TimeOnly.MinValue)
                 },
                 transaction);
-
-            const string itemSql = """
-                INSERT INTO ExpenseItems
-                    (ExpenseClaimId, Category, Amount, Description, ExpenseDate)
-                VALUES
-                    (@ExpenseClaimId, @Category, @Amount, @Description, @ExpenseDate);
-                """;
-
-            foreach (var item in request.Items)
-            {
-                await connection.ExecuteAsync(
-                    itemSql,
-                    new
-                    {
-                        ExpenseClaimId = claimId,
-                        Category = item.Category.ToString(),
-                        item.Amount,
-                        Description = string.IsNullOrWhiteSpace(item.Description) ? null : item.Description.Trim(),
-                        ExpenseDate = item.ExpenseDate.ToDateTime(TimeOnly.MinValue)
-                    },
-                    transaction);
-            }
-
-            transaction.Commit();
         }
-        catch
-        {
-            transaction.Rollback();
-            throw;
-        }
+
+        transaction.Commit();
 
         await eventBus.PublishAsync(new ExpenseClaimCreatedEvent(
             claimId,

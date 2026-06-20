@@ -4,9 +4,6 @@ namespace Expenses.Api.Infrastructure.Data;
 
 public static class ExpenseDatabaseInitializer
 {
-    private const int MaxAttempts = 30;
-    private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(2);
-
     public static async Task InitializeExpenseDatabaseAsync(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
@@ -18,27 +15,9 @@ public static class ExpenseDatabaseInitializer
         var connectionString = configuration.GetConnectionString("SqlServerConnection")
             ?? throw new InvalidOperationException("Connection string 'SqlServerConnection' is not configured.");
 
-        for (var attempt = 1; attempt <= MaxAttempts; attempt++)
-        {
-            try
-            {
-                await EnsureDatabaseAsync(connectionString);
-                await EnsureSchemaAsync(connectionString);
-                logger.LogInformation("Expense database schema is ready.");
-                return;
-            }
-            catch (SqlException ex) when (attempt < MaxAttempts)
-            {
-                logger.LogWarning(
-                    ex,
-                    "SQL Server is not ready. Retrying database initialization in {RetryDelaySeconds} seconds. Attempt {Attempt}/{MaxAttempts}.",
-                    RetryDelay.TotalSeconds,
-                    attempt,
-                    MaxAttempts);
-
-                await Task.Delay(RetryDelay);
-            }
-        }
+        await EnsureDatabaseAsync(connectionString);
+        await EnsureSchemaAsync(connectionString);
+        logger.LogInformation("Expense database schema is ready.");
     }
 
     private static async Task EnsureDatabaseAsync(string connectionString)

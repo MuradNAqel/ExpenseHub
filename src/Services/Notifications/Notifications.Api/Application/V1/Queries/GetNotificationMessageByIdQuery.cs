@@ -2,7 +2,6 @@ using Dapper;
 using Notifications.Api.Application.Abstractions;
 using Notifications.Api.Application.Dtos;
 using Notifications.Api.Application.Mappers;
-using Notifications.Api.Core.Interfaces;
 
 namespace Notifications.Api.Application.V1.Queries;
 
@@ -39,7 +38,7 @@ public sealed class GetNotificationMessageByIdQueryHandler(
         {
             return null;
         }
-        
+
         return NotificationMapper.MapNotification(notification);
     }
 }

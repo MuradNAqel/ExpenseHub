@@ -8,6 +8,11 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/Notifications/Notifications.Api/Notifications.Api.csproj", "src/Services/Notifications/Notifications.Api/"]
+COPY ["src/BuildingBlocks/WebApi/WebApi/WebApi.csproj", "src/BuildingBlocks/WebApi/WebApi/"]
+COPY ["src/BuildingBlocks/EventBus/EventBus/EventBus.csproj", "src/BuildingBlocks/EventBus/EventBus/"]
+COPY ["src/BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "src/BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
+COPY ["src/BuildingBlocks/NotificationCore/NotificationCore/NotificationCore.csproj", "src/BuildingBlocks/NotificationCore/NotificationCore/"]
+COPY ["src/BuildingBlocks/NotificationCore/NotificationCore.Telegram/NotificationCore.Telegram.csproj", "src/BuildingBlocks/NotificationCore/NotificationCore.Telegram/"]
 RUN dotnet restore "src/Services/Notifications/Notifications.Api/Notifications.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Notifications/Notifications.Api"

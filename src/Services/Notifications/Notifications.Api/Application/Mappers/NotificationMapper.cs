@@ -9,15 +9,15 @@ internal static class NotificationMapper
         return new NotificationMessageResponse
         {
             Id = message.Id,
-            Body =  message.Body,
+            Body = message.Body,
             CreatedAt = message.CreatedAt,
             SentAt = message.SentAt,
             Recipient = message.Recipient,
             Subject = message.Subject,
             Type = message.Type,
-            ErrorMessage =  message.ErrorMessage,
-            MessageChannel =  message.MessageChannel,
-            Status =   message.Status,
+            ErrorMessage = message.ErrorMessage,
+            MessageChannel = message.MessageChannel,
+            Status = message.Status,
         };
     }
 }

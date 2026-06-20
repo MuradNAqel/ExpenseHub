@@ -1,7 +1,6 @@
 using Notifications.Api.Application.Abstractions;
 using Notifications.Api.Application.Dtos;
 using Notifications.Api.Application.V1.Queries;
-using Notifications.Api.Core.Interfaces;
 
 namespace Notifications.Api.Infrastructure.Services;
 

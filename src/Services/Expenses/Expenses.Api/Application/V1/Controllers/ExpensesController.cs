@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using Expenses.Api.Application.Dtos;
-using Expenses.Api.Core.Interfaces;
+using Expenses.Api.Application.V1.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Expenses.Api.Application.V1.Controllers;
@@ -10,10 +9,11 @@ namespace Expenses.Api.Application.V1.Controllers;
 public class ExpensesController(IExpenseService expenseService) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(IReadOnlyList<ExpenseClaimSummaryResponse>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyList<ExpenseClaimSummaryResponse>>> GetAllAsync()
+    [ProducesResponseType(typeof(PagedResponse<ExpenseClaimSummaryResponse>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<PagedResponse<ExpenseClaimSummaryResponse>>> GetAllAsync(
+        [FromQuery] GetAllExpenseClaimsQuery query)
     {
-        var expenses = await expenseService.GetAllAsync();
+        var expenses = await expenseService.GetAllAsync(query);
         return Ok(expenses);
     }
 
@@ -35,15 +35,8 @@ public class ExpensesController(IExpenseService expenseService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> CreateAsync(CreateExpenseClaimRequest request)
     {
-        try
-        {
-            var id = await expenseService.CreateAsync(request);
-            return CreatedAtAction("GetById", new { id }, new { id });
-        }
-        catch (ValidationException exception)
-        {
-            return BadRequest(new { error = exception.Message });
-        }
+        var id = await expenseService.CreateAsync(request);
+        return CreatedAtAction("GetById", new { id }, new { id });
     }
 
     [HttpPost("{id:long}/approve")]
@@ -65,18 +58,11 @@ public class ExpensesController(IExpenseService expenseService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> RejectAsync(long id, RejectExpenseClaimRequest request)
     {
-        try
-        {
-            var rejected = await expenseService.RejectAsync(id, request);
+        var rejected = await expenseService.RejectAsync(id, request);
 
-            if (!rejected)
-                return NotFound();
+        if (!rejected)
+            return NotFound();
 
-            return NoContent();
-        }
-        catch (ValidationException exception)
-        {
-            return BadRequest(new { error = exception.Message });
-        }
+        return NoContent();
     }
 }

@@ -1,4 +1,3 @@
-using Expenses.Api.Core.Enums;
 
 namespace Expenses.Api.Core.Models;
 

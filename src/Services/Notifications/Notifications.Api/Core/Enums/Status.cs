@@ -2,7 +2,7 @@ namespace Notifications.Api.Core.Enums;
 
 public enum Status
 {
-    Pending,    
+    Pending,
     Sent,
     Reviewed
 }

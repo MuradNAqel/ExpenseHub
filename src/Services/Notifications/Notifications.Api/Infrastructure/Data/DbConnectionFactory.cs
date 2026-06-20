@@ -1,6 +1,5 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
-using Notifications.Api.Core.Interfaces;
 
 namespace Notifications.Api.Infrastructure.Data
 {

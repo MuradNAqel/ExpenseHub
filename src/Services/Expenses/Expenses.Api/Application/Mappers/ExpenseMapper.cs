@@ -1,5 +1,4 @@
 using Expenses.Api.Application.Dtos;
-using Expenses.Api.Core.Enums;
 
 namespace Expenses.Api.Application.Mappers;
 
